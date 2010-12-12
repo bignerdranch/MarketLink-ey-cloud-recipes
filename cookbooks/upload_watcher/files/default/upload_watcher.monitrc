@@ -1,6 +1,6 @@
 check process upload_watcher
   with pidfile /data/MarketLink/current/tmp/pids/upload_watcher.pid
-  start program = "/bin/sh -c 'cd /data/MarketLink/current; RAILS_ENV=production rake market_link:uploads:watch& > log/upload_watcher.log && echo $! > tmp/pids/upload_watcher.pid'" as uid deploy and gid deploy
+  start program = "/bin/sh -c 'cd /data/MarketLink/current; RAILS_ENV=production rake market_link:uploads:watch >> log/upload_watcher.log 2>&1 && echo $! > tmp/pids/upload_watcher.pid'" as uid deploy and gid deploy
   stop program = "/bin/sh -c 'cd /data/MarketLink/current && kill -s QUIT `cat tmp/pids/upload_watcher.pid` && rm -f tmp/pids/upload_watcher.pid; exit 0;'"
   if totalmem is greater than 300 MB for 10 cycles then restart  # eating up memory?
   group upload_watchers

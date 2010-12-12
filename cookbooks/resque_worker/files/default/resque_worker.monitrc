@@ -1,6 +1,6 @@
 check process resque_worker
   with pidfile /data/MarketLink/current/tmp/pids/resque_worker.pid
-  start program = "/bin/sh -c 'cd /data/MarketLink/current; RAILS_ENV=production QUEUE=* VERBOSE=1 rake environment resque:work & > log/resque_worker.log && echo $! > tmp/pids/resque_worker.pid'" as uid deploy and gid deploy
+  start program = "/bin/sh -c 'cd /data/MarketLink/current; RAILS_ENV=production QUEUE=* VERBOSE=1 rake environment resque:work >> log/resque_worker.log 2>&1 && echo $! > tmp/pids/resque_worker.pid'" as uid deploy and gid deploy
   stop program = "/bin/sh -c 'cd /data/MarketLink/current && kill -s QUIT `cat tmp/pids/resque_worker.pid` && rm -f tmp/pids/resque_worker.pid; exit 0;'"
   if totalmem is greater than 300 MB for 10 cycles then restart  # eating up memory?
   group resque_workers
